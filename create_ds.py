@@ -5,6 +5,10 @@ import os
 import random
 import numpy as np
 
+from keras.layers.core import Dense,Flatten
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.optimizers import Adam
+
 path = './data/hmdb51'
 path_rowframes = './data/hmdb51/rawframes/'
 path_annotations = './data/hmdb51/annotations/'
@@ -68,14 +72,10 @@ def find_paths(partition, type_frame, num_frames_desired):
     return(list(zip(paths, classes)))
 
 
-
-
-        
-#classes = os.listdir(path_rowframes)
-filenames = find_paths(partition=partition, type_frame=type_frame, num_frames_desired=num_frames_desired)
+# ------- create train set
+filenames = find_paths(partition='train', type_frame=type_frame, num_frames_desired=num_frames_desired)
 
 random.shuffle(filenames)
-
 
 zipped = [list(t) for t in zip(*filenames)]
 
@@ -86,10 +86,89 @@ filenames_ds = tf.data.Dataset.from_tensor_slices(filenames)
 images_ds = filenames_ds.map(parse_image, num_parallel_calls=tf.data.experimental.AUTOTUNE)
 labels_ds = tf.data.Dataset.from_tensor_slices(labels)
 ds = tf.data.Dataset.zip((images_ds, labels_ds))
-ds = configure_for_performance(ds)
+train_ds = configure_for_performance(ds)
+
+
+# ------- create val test
+filenames = find_paths(partition='val', type_frame=type_frame, num_frames_desired=num_frames_desired)
+
+random.shuffle(filenames)
+
+zipped = [list(t) for t in zip(*filenames)]
+
+filenames = zipped[0]
+labels = zipped[1]
+
+filenames_ds = tf.data.Dataset.from_tensor_slices(filenames)
+images_ds = filenames_ds.map(parse_image, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+labels_ds = tf.data.Dataset.from_tensor_slices(labels)
+ds = tf.data.Dataset.zip((images_ds, labels_ds))
+val_ds = configure_for_performance(ds)
+
+
+
+
 
 '''
-for image, label in ds.take(2):
-    print(image.numpy())
-    print(label.numpy())
+def build_model(num_classes, img_size=224):
+    input = tf.keras.layers.Input(shape=(img_size, img_size, 3))
+    model = tf.keras.applications.ResNet50(include_top=False, input_tensor=input, weights="imagenet")
+
+    # Freeze the pretrained weights
+    model.trainable = False
+
+    # Rebuild top
+    x = tf.keras.layers.GlobalAveragePooling2D(name="avg_pool")(model.output)
+    x = tf.keras.layers.BatchNormalization()(x)
+
+    top_dropout_rate = 0.2
+    x = tf.keras.layers.Dropout(top_dropout_rate, name="top_dropout")(x)
+    output = tf.keras.layers.Dense(num_classes, activation="softmax", name="pred")(x)
+
+    # Compile
+    model = tf.keras.Model(input, output, name="EfficientNet")
+    model.compile(optimizer='adam', loss="sparse_categorical_crossentropy", metrics=["accuracy"])
+    return model
+
+
+
+
+model = build_model(num_classes)
+model.fit(train_ds, validation_data = val_ds, batch_size=32, epochs=5, steps_per_epoch=1000)
+'''
+
+
+'''
+input = tf.keras.layers.Input(shape=(img_height, img_width, 3))
+
+pretrained_model = tf.keras.applications.ResNet50(include_top=False,
+                                                  input_tensor=input,
+                                                  pooling='avg',
+                                                  weights='imagenet')
+pretrained_model.trainable = False
+
+resnet_model = Sequential()
+resnet_model.add(pretrained_model)
+
+resnet_model.add(Flatten())
+resnet_model.add(Dense(512, activation='relu'))
+resnet_model.add(Dense(num_classes, activation='softmax'))
+
+print(resnet_model.summary())
+resnet_model.compile(optimizer = Adam(learning_rate=0.001), loss = 'sparse_categorical_crossentropy', metrics = ['sparse_categorical_accuracy'])
+
+history = resnet_model.fit(train_ds, validation_data = val_ds, epochs=5, steps_per_epoch=1000) # da aggiustare
+
+
+fig1 = plt.gcf()
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.axis(ymin=0.2,ymax=1)
+plt.grid()
+plt.title('Model Accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epochs')
+plt.legend(['train', 'validation'])
+plt.savefig('img.png')
+plt.show()
 '''
