@@ -10,3 +10,5 @@ Models/
 
 rawframes.7z
 Plots/~$Models_accuracy.xlsx
+*.xlsx
+Plots/Models_accuracy.xlsx
