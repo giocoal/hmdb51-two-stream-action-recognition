@@ -1,11 +1,18 @@
 # VIDEO CLASSIFICATION: HUMAN ACTION RECOGNITION ON HMDB51 DATASET
 
+We use spatial (ResNet-50 Finetuned) and temporal stream cnn under the Keras framework to perform Video-Based Human Action Recognition on HMDB-51 dataset.
+
 Report pdf: [https://github.com/giocoal/hmdb51-two-stream-action-recognition/blob/main/Report/Deep%20Learning%20-%20Video%20Action%20Recognition.pdf]
+
+## References
+
+*  [[1] Two-stream convolutional networks for action recognition in videos](http://papers.nips.cc/paper/5353-two-stream-convolutional)
+
+*  [[2] HMDB: A Large Video Database for Human Motion Recognition](https://serre-lab.clps.brown.edu/wp-content/uploads/2012/08/Kuehne_etal_iccv11.pdf)
 
 ## Abstract
 
 HMDB51 is a large database of videos for human action recognition, which is the main task of our project. 
-- Paper: https://serre-lab.clps.brown.edu/wp-content/uploads/2012/08/Kuehne_etal_iccv11.pdf
 - Official website: https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/
 
 By Human Action Recognition (HAR) we identify that task which involves the classification of one or more actions performed by one or more human subjects. The strong advancement of computer vision and the large amount of video available, have made video classification methods the most common approach to tthe problem.
