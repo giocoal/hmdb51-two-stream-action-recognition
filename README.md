@@ -2,13 +2,15 @@
 
 We use spatial (ResNet-50 Finetuned) and temporal stream cnn under the Keras framework to perform Video-Based Human Action Recognition on HMDB-51 dataset.
 
-Report pdf: [https://github.com/giocoal/hmdb51-two-stream-action-recognition/blob/main/Report/Deep%20Learning%20-%20Video%20Action%20Recognition.pdf]
+- Check out our [pdf report](https://github.com/giocoal/hmdb51-two-stream-action-recognition/blob/main/Report/Deep%20Learning%20-%20Video%20Action%20Recognition.pdf) 
 
 ## References
 
 *  [[1] Two-stream convolutional networks for action recognition in videos](http://papers.nips.cc/paper/5353-two-stream-convolutional)
 
 *  [[2] HMDB: A Large Video Database for Human Motion Recognition](https://serre-lab.clps.brown.edu/wp-content/uploads/2012/08/Kuehne_etal_iccv11.pdf)
+
+*  [[3 A duality based approach for realtime tv-l 1 optical flow](https://www-pequan.lip6.fr/~bereziat/cours/master/vision/papers/zach07.pdf)
 
 ## Abstract
 
@@ -23,39 +25,58 @@ HMDB-51 this contains 51 distinct action categories, each associated with at lea
 The data preparation process that preceded the training of the models first involved 1) a split of the dataset into training and test set using the split suggested by the authors which ensures that a) clips from the same video are not present in both the train and test set b) that for each class there are exactly 70 train and 30 test clips and c) and that there is maximization of the relative proportion balance of the meta tags.
 2) Frame extraction and optical flow estimation follow. By optical flow we define the apperent motion pattern of objects in a scene between two consecutive frames caused by object or camera motion that coincides with a field of two-dimensional point-shift vectors between one frame and the next. Dual TV-L1, an algorithm for dense optical flows (which then computes the motion vector for each pixel), found in the OpenCV library, was used for estimation, and for each flow the horizontal and vertical component.
 
-### 1. Data Collection
+## Data
 
-1. Request and add Twitch API keys to the file `Twitch_API_keys.txt`
-2. Create a repeated execution task for `Twitch_stream_collection.py` every xx minutes (Win: Task Scheduler, Linux: Crontab)
-    - choose the language of the desired streams
-    - this script saves the collected stream files in individual json files but it's already supported the upload on MongoDB local server, uncomment the import function in the script (it requires [MongoDB Community Server](https://www.mongodb.com/try/download/community))
-3. Run `steam_games_scraping.ipynb` to scrape [SteamDB](https://steamdb.info/graph/) website (if the website asks CAPTCHA clean browser cookies)
-4. Download bot dataset from [Twitch Insights](https://twitchinsights.net/bots) using a browser extension (e.g. Table Capture for Chrome) and save it as `Twitch_bot_list.csv`
-5. Run `Twitch_social_link.py` to obtain the streamer's social link (this can be run only after Data Processing because it needs the complete streamer list)
+### Spatial input data -> rgb frames
+  First, download the dataset from UCF into the `data` folder:
+  `cd data && wget http://crcv.ucf.edu/data/UCF101/UCF101.rar`
+  
+  Then extract it with `unrar e UCF101.rar`. in disk, which costs about 5.9G.
+  
+  We use split #1 for all of our experiments.
 
-### 2. Data Processing
+### Motion input data -> stacked optical flows
 
-1. Run `DataProcessing.ipynb` selecting the parameters for the analysis in the first block:
-    - data source (json files or MongoDB local server)
-    - set the time interval acquisition (xx minutes)
-    - set parameters and thresholds
-2. Run `DataEnrichment.ipynb` to add games info from SteamDB (verify manually the matches)
-3. Run `DataExploration.ipynb` and `DataQuality.ipynb` to obtain data insights
+Download the preprocessed tvl1 optical flow dataset directly from https://github.com/feichtenhofer/twostreamfusion. 
+  ```
+  wget http://ftp.tugraz.at/pub/feichtenhofer/tsfusion/data/ucf101_tvl1_flow.zip.001
+  wget http://ftp.tugraz.at/pub/feichtenhofer/tsfusion/data/ucf101_tvl1_flow.zip.002
+  wget http://ftp.tugraz.at/pub/feichtenhofer/tsfusion/data/ucf101_tvl1_flow.zip.003
+  cat ucf101_tvl1_flow.zip* > ucf101_tvl1_flow.zip
+  unzip ucf101_tvl1_flow.zip
+  ```
 
-### 3. Data Modelling
+## Model
 
-1. Install [Neo4j Community Server](https://neo4j.com/download-center/#community)
-2. Copy the CSVs obtained from the `output_datasets` folder to the neo4j import folder (`neo4j/import/`)
-3. Run `graph_neo4j.ipynb` to load data in Neo4j
-4. Execute desired queries
+### Spatial-stream cnn
 
-### 4. Data Visualization
+* As mention before, we use ResNet-50 first pre-trained with ImageNet then fine-tuning on our HMDB-51 spatial rgb image dataset. 
 
-1. Install Gephi
-2. Import `Streamer_dataset_short.csv` and `Streamer-Streamer_dataset_short.csv`
-3. Execute some layout algorithms (e.g. Atlas Force), execute statistics analysis to detect communities (e.g. Modularity), edit nodes and edges colors (more details [here](https://github.com/KiranGershenfeld/VisualizingTwitchCommunities))
+* 17 equidistant frames are sampled from a video. 
 
+### Temporal-stream cnn
 
-For additional info on the project read `ProjectReport_ita.pdf` (in Italian)
+*  We train the temporal-stream cnn from scratch. In every mini-batch, we randomly select 128 (batch size) videos from training videos and futher randomly select 1 optical flow stack in each video. We follow the reference paper and use 10 x-channels and 10 y-channels for each optical flow stack, resulting in a input shape of (224, 224, 20). 
 
-![Graph visualization on Gephi May 2022](https://github.com/gianscuri/Twitch_Community_Graph/blob/main/DataVisualization/Images/Gephi_graph_dark.png)
+* Input data of motion cnn is a stack of optical flow images which contained 10 x-channel and 10 y-channel images, So it's input shape is (20, 224, 224) which can be considered as a 20-channel image.
+
+*  Multiple workers are utilized in the data generator for faster training.
+
+## Data augmentation
+
+*  Both streams apply the same data augmentation technique such as random cropping and random horizontal flipping. Temporally, we pick the starting frame among those early enough to guarantee a desired number of frames. 
+
+## Testing
+
+*  We fused the two streams by averaging the softmax scores.
+
+* Two evaluation strategies were used:
+[1] **"One frame per video" method** For each batch element, a random video was selected, and for each video/element a single frame is selected and given as input to the spatial stream. The selected frame is also used as the initial frame to obtain the stacked optical flows of 10 consecutive frames, which is given as input to the temporal stream. Softmax scores are averaged. The prediction is compared with the label.
+[2]  **"Whole video" method**: An arbitrary video is selected. All frames of the video are given as input to the spatial stream, the stream prediction is obtained as the average of the probabilities of all frames. All possible stacked optical flows of the video (the highest frame that can be used as a start frame is total_frame - 10) are given as input to the motion stream, the stream prediction is obtained as the average of the probabilities of all stacked optical flows. The final prediction is obtained as the average of the probabilities of the two streams.
+
+## Results
+|Network     | One frame | Whole video  |
+-------------|:--------------:|:----:|
+|Spatial ResNet-50     |39.0%           |45.0% |
+|Temporal    |25.8%           |NA% |
+|Fusion      |38.0%           |NA% |
