@@ -82,10 +82,10 @@ Run the following script: `data/video_train_test_split_list_generator.py`
 Two evaluation strategies were used:
 
 * [1] **"One frame per video" method** For each batch element, a random video was selected, and for each video/element a single frame is selected and given as input to the spatial stream. The selected frame is also used as the initial frame to obtain the stacked optical flows of 10 consecutive frames, which is given as input to the temporal stream. Softmax scores are averaged. The prediction is compared with the label.
- * Run the following script: `two_stream_fusion_validate.ipynb` 
+    * Run the following script: `two_stream_fusion_validate.ipynb` 
 
 * [2]  **"Whole video" method**: An arbitrary video is selected. All frames of the video are given as input to the spatial stream, the stream prediction is obtained as the average of the probabilities of all frames. All possible stacked optical flows of the video (the highest frame that can be used as a start frame is total_frame - 10) are given as input to the motion stream, the stream prediction is obtained as the average of the probabilities of all stacked optical flows. The final prediction is obtained as the average of the probabilities of the two streams.
- * Run the following script: `two_stream_fusion_validate_full_video.ipynb` 
+    * Run the following script: `two_stream_fusion_validate_full_video.ipynb` 
 
 ## Results
 |Network     | One frame | Whole video  |
