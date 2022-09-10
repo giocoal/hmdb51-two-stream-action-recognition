@@ -1,20 +1,20 @@
-# Twitch community graph
+# VIDEO CLASSIFICATION: HUMAN ACTION RECOGNITION ON HMDB51 DATASET
+
+Report pdf: [https://github.com/giocoal/hmdb51-two-stream-action-recognition/blob/main/Report/Deep%20Learning%20-%20Video%20Action%20Recognition.pdf]
 
 ## Abstract
 
-[Twitch.tv](https://www.twitch.tv/) is a **live streaming platform** that allows streamers to broadcast and users to enjoy content in real time. The broadcasts cover various categories related mainly to the world of videogames, entertainment, and the arts.
-Thanks to its great success, especially in the last few years, both the revenue opportunities for streamers and companies operating in these sectors have increased.
-**Understanding the market and the platform**, however, is crucial to discover the interests of users.
-This project therefore aims to **collect and analyze data** about the different streams in order to create an explorable and queryable **graph model** of the communities present thus enabling accurate market analysis.
+HMDB51 is a large database of videos for human action recognition, which is the main task of our project. 
+- Paper: https://serre-lab.clps.brown.edu/wp-content/uploads/2012/08/Kuehne_etal_iccv11.pdf
+- 
 
-The project consists in a series of scripts to collect, integrate, analyze and save data from different sources. It is thus a tool that can be run in any time frame to obtain the up-to-date graph of the situation.
-The data collection phase is done from **two distinct data sources**: [Twitch](https://www.twitch.tv/) for live information through the use of the official **Web APIs** and from [SteamDB](https://steamdb.info/graph/) for videogames informations through **dynamic scraping techniques**. In the processing phase, the datasets containing the streamers, the different video games streamed, and the related bridge-tables that allow them to be linked are then obtained. The **streamer-game relations** were calculated by analyzing the broadcast categories, while the **streamer-streamer relations** were calculated by evaluating the percentage of common viewers between each pair of streamers.
+By Human Action Recognition (HAR) we identify that task which involves the classification of one or more actions performed by one or more human subjects. The strong advancement of computer vision and the large amount of video available, have made video classification methods the most common approach to tthe problem.
+The specific task was Simple Action Recognition, the training of a model that classifies a single global action (performed by one or more subjects) associated with a short video input.
 
-This repository contains data collected over a **two-week period in May 2022 regarding all Italian broadcasts** on Twitch and data from SteamDB regarding the most played videogames. Approximately 2.5GB of data were collected during this period, which after a detailed analysis allowed the creation of a graph model on the [Neo4j DBMS](https://neo4j.com/) consisting of **4121 nodes and 54931 edges**.
+HMDB-51 this contains 51 distinct action categories, each associated with at least 101 clips, for a total of 6766 annotated clips, extracted mainly from movies and youtube videos. The classes of actions can be grouped into: 1) general facial actions such as smiling 2) facial actions with object manipulation (such as eating) 3) general body movements (such as jumping) 4) body movements involving interaction with objects (such as combing) and 5) finally body movements with human interaction such as (such as hugging).
 
-## Execution scheme
-
-![Pipeline](https://github.com/gianscuri/Twitch_Community_Graph/blob/main/DataVisualization/Images/pipeline.png)
+The data preparation process that preceded the training of the models first involved 1) a split of the dataset into training and test set using the split suggested by the authors which ensures that a) clips from the same video are not present in both the train and test set b) that for each class there are exactly 70 train and 30 test clips and c) and that there is maximization of the relative proportion balance of the meta tags.
+2) Frame extraction and optical flow estimation follow. By optical flow we define the apperent motion pattern of objects in a scene between two consecutive frames caused by object or camera motion that coincides with a field of two-dimensional point-shift vectors between one frame and the next. Dual TV-L1, an algorithm for dense optical flows (which then computes the motion vector for each pixel), found in the OpenCV library, was used for estimation, and for each flow the horizontal and vertical compo
 
 ### 1. Data Collection
 
