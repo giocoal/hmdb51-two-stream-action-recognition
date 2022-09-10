@@ -1,6 +1,6 @@
 # VIDEO CLASSIFICATION: HUMAN ACTION RECOGNITION ON HMDB51 DATASET
 
-We use spatial (ResNet-50 Finetuned) and temporal stream cnn under the Keras framework to perform Video-Based Human Action Recognition on HMDB-51 dataset.
+We use spatial (ResNet-50 finetuned) and temporal stream cnn under the Keras framework to perform Video-Based Human Action Recognition on HMDB-51 dataset.
 
 - Check out our [pdf report](https://github.com/giocoal/hmdb51-two-stream-action-recognition/blob/main/Report/Deep%20Learning%20-%20Video%20Action%20Recognition.pdf) 
 
