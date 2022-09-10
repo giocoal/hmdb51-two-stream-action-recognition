@@ -10,7 +10,7 @@ We use spatial (ResNet-50 Finetuned) and temporal stream cnn under the Keras fra
 
 *  [[2] HMDB: A Large Video Database for Human Motion Recognition](https://serre-lab.clps.brown.edu/wp-content/uploads/2012/08/Kuehne_etal_iccv11.pdf)
 
-*  [[3 A duality based approach for realtime tv-l 1 optical flow](https://www-pequan.lip6.fr/~bereziat/cours/master/vision/papers/zach07.pdf)
+*  [[3] A duality based approach for realtime tv-l 1 optical flow](https://www-pequan.lip6.fr/~bereziat/cours/master/vision/papers/zach07.pdf)
 
 ## Abstract
 
