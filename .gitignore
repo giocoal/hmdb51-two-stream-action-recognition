@@ -3,7 +3,9 @@ data/hmdb51/rawframes/
 data/hmdb51/videos/
 Report/Presentazione Deep Learning.pptx
 Report/Discorso Presentazione Deep Learning.docx
-Models/
+Models/motion_stream/
+Models/spatial_stream_CNN/
+Models/spatial_stream_resnet/
 OldStuff/
 
 # Files
