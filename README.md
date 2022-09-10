@@ -39,13 +39,13 @@ Download annotations from the [official website](http://serre-lab.clps.brown.edu
 First, download and extract the dataset from HMDB-51 into the `data/hmdb51/videos` folder:
   * [Download page](http://serre-lab.clps.brown.edu/wp-content/uploads/2013/10/hmdb51_org.rar)
 
-## Step 3. Extract RGB and Flow (requires CUDA-enabled Open-CV)
+### Step 3. Extract RGB and Flow (requires CUDA-enabled Open-CV)
 
 If you have plenty of SSD space, then we recommend extracting frames there for better I/O performance.
 
 Run the following script: `data/rawframes&opticalflow_extraction.py`
   
-## Step 4. Generate File List
+### Step 4. Generate File List
 
 Generate file list in the format of rawframes and video (training and test video lists and path)
 
