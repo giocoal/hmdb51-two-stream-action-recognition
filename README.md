@@ -35,7 +35,7 @@ The data preparation process that preceded the training of the models first invo
 - numpy 1.22.1
 - pandas 1.3.5
 - Pillow 9.3.0
-- vscipy 1.9.3
+- scipy 1.9.3
 - tensorflow 2.10.0
 - tqdm 4.64.1
 - opencv 4.5.1
