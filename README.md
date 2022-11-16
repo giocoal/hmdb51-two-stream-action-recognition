@@ -28,8 +28,8 @@ The data preparation process that preceded the training of the models first invo
 ## Requirements
 
 - python 3.10.7
-- imageio 2.22.4
 - ipython 8.6.0
+- imageio 2.22.4
 - keras 2.11.0
 - matplotlib 3.6.2
 - numpy 1.22.1
