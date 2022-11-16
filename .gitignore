@@ -12,6 +12,7 @@ OldStuff/
 .vscode
 data/hmdb51/videos/rawframes.7z
 rawframes.7z
+requireements.txt
 Plots/~$Models_accuracy.xlsx
 *.xlsx
 Plots/Models_accuracy.xlsx
