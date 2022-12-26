@@ -44,7 +44,7 @@ The data preparation process that preceded the training of the models first invo
 
 ### Step 0. Prepare Folders
 
-First of all, create two empty folders: `data/hmdb51/videos`,`data/hmdb51/rawframes` and `Models`.
+First of all, create three empty folders: `data/hmdb51/videos`,`data/hmdb51/rawframes` and `Models`.
 
 ### Step 1. Prepare Annotations (training/test splits)
 
@@ -54,11 +54,15 @@ Download annotations from the [official website](http://serre-lab.clps.brown.edu
 First, download and extract the dataset from HMDB-51 into the `data/hmdb51/videos` folder:
   * [Download page](http://serre-lab.clps.brown.edu/wp-content/uploads/2013/10/hmdb51_org.rar)
 
-### Step 3. Extract RGB and Flow (requires CUDA-enabled Open-CV)
+### Step 3. Extract RGB and Flow Frames (requires CUDA-enabled Open-CV) or Download them
 
+#### Option 1: generate them with the dedicated script
 If you have plenty of SSD space, then we recommend extracting frames there for better I/O performance.
-
 Run the following script: `data/rawframes&opticalflow_extraction.py`
+
+#### Option 2: Download pre-generated frames
+1. Download the .zip file from [Google Drive](https://drive.google.com/drive/folders/1qy5_ukO7_e-XftKfSCjjLkO_Vv2Peqis?usp=sharing)
+2. Extract the .zip file content in `data/hmdb51/rawframes`
   
 ### Step 4. Generate File List
 
