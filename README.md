@@ -54,7 +54,7 @@ Download annotations from the [official website](http://serre-lab.clps.brown.edu
 First, download and extract the dataset from HMDB-51 into the `data/hmdb51/videos` folder:
   * [Download page](http://serre-lab.clps.brown.edu/wp-content/uploads/2013/10/hmdb51_org.rar)
 
-### Step 3. Extract RGB and Flow Frames (requires CUDA-enabled Open-CV) or Download them
+### Step 3. Extract or Download RGB and Flow Frames (requires CUDA-enabled Open-CV)
 
 #### Option 1: generate them with the dedicated script
 If you have plenty of SSD space, then we recommend extracting frames there for better I/O performance.
