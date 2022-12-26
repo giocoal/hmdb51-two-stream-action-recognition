@@ -60,7 +60,7 @@ First, download and extract the dataset from HMDB-51 into the `data/hmdb51/video
 If you have plenty of SSD space, then we recommend extracting frames there for better I/O performance.
 Run the following script: `data/rawframes&opticalflow_extraction.py`
 
-#### Option 2: Download pre-generated frames
+#### Option 2: download the pre-generated frames
 1. Download the .zip file from [Google Drive](https://drive.google.com/drive/folders/1qy5_ukO7_e-XftKfSCjjLkO_Vv2Peqis?usp=sharing)
 2. Extract the .zip file content in `data/hmdb51/rawframes`
   
