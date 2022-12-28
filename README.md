@@ -51,7 +51,7 @@ First of all, create three empty folders: `data/hmdb51/videos`,`data/hmdb51/rawf
 Download annotations from the [official website](http://serre-lab.clps.brown.edu/wp-content/uploads/2013/10/test_train_splits.rar) and extract them in `data/hmdb51/annotations`
 
 ### Step 2. Prepare Videos
-First, download and extract the dataset from HMDB-51 into the `data/hmdb51/videos` folder:
+Download and extract the dataset from HMDB-51 into the `data/hmdb51/videos` folder:
   * [Download page](http://serre-lab.clps.brown.edu/wp-content/uploads/2013/10/hmdb51_org.rar)
 
 ### Step 3. Extract or Download RGB and Flow Frames (requires CUDA-enabled Open-CV)
