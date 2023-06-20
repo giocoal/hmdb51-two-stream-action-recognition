@@ -1,4 +1,4 @@
-# VIDEO CLASSIFICATION: HUMAN ACTION RECOGNITION ON HMDB51 DATASET
+# VIDEO CLASSIFICATION: HUMAN ACTION RECOGNITION ON HMDB51 DATASET 
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
