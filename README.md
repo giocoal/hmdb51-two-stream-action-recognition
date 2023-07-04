@@ -68,7 +68,7 @@ If you have plenty of SSD space, then we recommend extracting frames there for b
 Run the following script: `data/rawframes&opticalflow_extraction.py`
 
 #### Option 2: download our pre-generated frames
-1. Download the .zip file from [Google Drive](https://drive.google.com/drive/folders/1qy5_ukO7_e-XftKfSCjjLkO_Vv2Peqis?usp=sharing)
+1. Download the .zip file from [Google Drive](https://drive.google.com/file/d/106MUBbWeLknj-1EhA3sKx9PIuq1tMEA4/view?usp=sharing)
 2. Extract the .zip file content in `data/hmdb51/rawframes`
   
 ### Step 4. Generate File List
